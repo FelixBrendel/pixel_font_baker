@@ -208,7 +208,7 @@ Pixel_Font_Baker_Error create_pixel_font_from_bdf(const char* font_path,
         // NOTE(Felix): Safety check that we won't run out of the string when
         //   reading all the bytes
         {
-            s32 needed_bytes =
+            u64 needed_bytes =
                 out_font->char_px_height*(2*(out_font->bytes_per_line)+1);
             // +1 for newline,
             // *2 for 2 chars for 1 byte in hex
@@ -269,7 +269,7 @@ Pixel_Font_Baker_Error create_pixel_font_from_ttf(const char* font_path, u16 cha
     //
     //  Preparing one-char-bitmap
     //
-    u8* bitmap;
+    // u8* bitmap;
     s32 unicode_cp_size  = unicode_cp_end - unicode_cp_start + 1;
 
     s32 char_width_in_px;
