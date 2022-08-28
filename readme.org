@@ -1,0 +1,38 @@
+* Readme
+
+Waveshare produces e-ink displays ([[https://www.waveshare.com/epaper]]) and
+provides some boilerplate code ([[https://github.com/waveshare/e-Paper]]) which
+allows you to blit bitmap fonts to it. For that it defines fonts with the
+struct
+
+#+begin_src c
+typedef struct _tFont
+{
+  const uint8_t *table;
+  uint16_t Width;
+  uint16_t Height;
+
+} sFONT;
+#+end_src
+
+The table contains the bitmaps for all the glyphs in the font. Waveshare
+also provides a default font.
+
+The code in this project allows you to load your own font files (ttf and
+bdf are supported). The font struct defined in this repository can be
+passed by pointer to the waveshare-supplied functions to draw text.
+
+However:
+
+ - Only monospace fonts are supported
+ - For bdf files: the given glyph bounding box in the header must match all
+   of the glyphs the file provides
+ - Right now depends on ftb ([[https://github.com/FelixBrendel/ftb/]])
+
+* Usage
+- This is single header library in the stlye of the stb libraries ([[https://github.com/nothings/stb/]])
+- In exactly one compilation-unit you should define =PIXEL_FONT_BAKER_IMPL=
+- This library provides 3 functions
+  - =create_pixel_font_from_bdf=
+  - =create_pixel_font_from_ttf=
+  - =destroy_pixel_font=
