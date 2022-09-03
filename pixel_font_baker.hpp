@@ -269,7 +269,7 @@ Pixel_Font_Baker_Error create_pixel_font_from_ttf(const char* font_path, u16 cha
     //
     //  Preparing one-char-bitmap
     //
-    // u8* bitmap;
+    u8* bitmap;
     s32 unicode_cp_size  = unicode_cp_end - unicode_cp_start + 1;
 
     s32 char_width_in_px;
