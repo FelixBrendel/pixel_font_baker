@@ -269,7 +269,7 @@ Pixel_Font_Baker_Error create_pixel_font_from_ttf(const char* font_path, u16 cha
     //
     //  Preparing one-char-bitmap
     //
-    u8* bitmap;
+
     s32 unicode_cp_size  = unicode_cp_end - unicode_cp_start + 1;
 
     s32 char_width_in_px;
@@ -328,9 +328,9 @@ Pixel_Font_Baker_Error create_pixel_font_from_ttf(const char* font_path, u16 cha
         s32 x_offset;
         s32 y_offset;
 
-        bitmap = stbtt_GetCodepointBitmap(&font, 0, font_scale, cp,
-                                          &bmp_width_in_px, &bmp_height_in_px,
-                                          &x_offset, &y_offset);
+        stbtt_GetCodepointBitmap(&font, 0, font_scale, cp,
+                                 &bmp_width_in_px, &bmp_height_in_px,
+                                 &x_offset, &y_offset);
 
 
         {
