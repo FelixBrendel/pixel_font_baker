@@ -77,11 +77,14 @@ Pixel_Font_Baker_Error create_pixel_font_from_bdf(const char* font_path,
                                                   u32 unicode_cp_start, u32 unicode_cp_end,
                                                   Pixel_Font* out_font)
 {
-    String file_content = read_entire_file(font_path);
-    if (!file_content)
+    File_Read file_content_read = read_entire_file(font_path);
+    if (!file_content_read.success) {
         return Pixel_Font_Baker_Error::FONT_FILE_COULD_NOT_BE_OPENED;
-    defer { file_content.free(); };
+    }
 
+    String file_content = file_content_read.contents;
+    defer { file_content.free(); };
+    
     String cursor = file_content;
 
     auto advance_cursor = [&](s32 amount = 1) -> void {
