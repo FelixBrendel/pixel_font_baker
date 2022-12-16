@@ -26,9 +26,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <ftb/types.hpp>
-#include <ftb/macros.hpp>
-#include <ftb/io.hpp>
+#include <ftb/core.hpp>
 
 // NOTE(Felix): Pixel_Font* can be casted to Waveshare's sFONT*
 struct Pixel_Font {
@@ -84,7 +82,7 @@ Pixel_Font_Baker_Error create_pixel_font_from_bdf(const char* font_path,
 
     String file_content = file_content_read.contents;
     defer { file_content.free(); };
-    
+
     String cursor = file_content;
 
     auto advance_cursor = [&](s32 amount = 1) -> void {
