@@ -39,15 +39,20 @@ struct Pixel_Font {
     u32 bytes_per_glyph;
 };
 
+#define PIXEL_FONT_BAKER_ERRORS                                \
+    ERROR(SUCCESS)                                             \
+    ERROR(MALLOC_FAILED)                                       \
+    ERROR(FONT_FILE_COULD_NOT_BE_OPENED)                       \
+    ERROR(BDF_DID_NOT_SPECIFY_FONTBOUNDINGBOX)                 \
+    ERROR(BDF_DID_NOT_SPECIFY_FONTBOUNDINGBOX_CORRECTLY)       \
+    ERROR(BDF_DID_NOT_SPECIFY_CODEPOINT_CORRECTLY)             \
+    ERROR(BDF_ERROR_PARSING_CHARACTER_BYTES)                   \
+    ERROR(STB_TRUETYPE_FAILED)                                 \
+
 enum struct Pixel_Font_Baker_Error {
-    SUCCESS,
-    MALLOC_FAILED,
-    FONT_FILE_COULD_NOT_BE_OPENED,
-    BDF_DID_NOT_SPECIFY_FONTBOUNDINGBOX,
-    BDF_DID_NOT_SPECIFY_FONTBOUNDINGBOX_CORRECTLY,
-    BDF_DID_NOT_SPECIFY_CODEPOINT_CORRECTLY,
-    BDF_ERROR_PARSING_CHARACTER_BYTES,
-    STB_TRUETYPE_FAILED,
+#define ERROR(key) key,
+    PIXEL_FONT_BAKER_ERRORS
+#undef ERROR
 };
 
 Pixel_Font_Baker_Error create_pixel_font_from_bdf(const char* font_path,
@@ -59,6 +64,8 @@ Pixel_Font_Baker_Error create_pixel_font_from_ttf(const char* font_path, u16 cha
                                                   u8 gray_threashold, u8 supersample, Pixel_Font* out_font);
 
 void destroy_pixel_font(Pixel_Font* out_font);
+
+const char* pixel_font_baker_error_to_string(Pixel_Font_Baker_Error e);
 
 #ifdef PIXEL_FONT_BAKER_IMPL
 #include <stdio.h>
@@ -80,10 +87,10 @@ Pixel_Font_Baker_Error create_pixel_font_from_bdf(const char* font_path,
         return Pixel_Font_Baker_Error::FONT_FILE_COULD_NOT_BE_OPENED;
     }
 
-    String file_content = file_content_read.contents;
+    Allocated_String file_content = file_content_read.contents;
     defer { file_content.free(); };
 
-    String cursor = file_content;
+    Allocated_String cursor = file_content;
 
     auto advance_cursor = [&](s32 amount = 1) -> void {
         cursor.data   += amount;
@@ -406,6 +413,15 @@ Pixel_Font_Baker_Error create_pixel_font_from_ttf(const char* font_path, u16 cha
 
 void destroy_pixel_font(Pixel_Font* font) {
     free(font->table);
+}
+
+const char* pixel_font_baker_error_to_string(Pixel_Font_Baker_Error e) {
+    switch (e) {
+#define ERROR(key) case Pixel_Font_Baker_Error::key: return #key;
+        PIXEL_FONT_BAKER_ERRORS
+#undef ERROR
+        default: return "Unkown Pixel_Font_Baker_Error";
+    }
 }
 
 #undef min
