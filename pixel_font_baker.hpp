@@ -27,6 +27,7 @@
  */
 
 #pragma once
+#include <math.h>
 #include <ftb/core.hpp>
 
 // NOTE(Felix): Pixel_Font* can be casted to Waveshare's sFONT*
